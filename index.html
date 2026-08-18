@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BarBeerQue -- Sizzle. Sip. Repeat.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --accent: #FF6A13;
+    --white: #FFFFFF;
+    --text-dark: #1A1A1A;
+    --text-muted: #6B6B6B;
+    --card-border: #FF6A13;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 100px;
+  }
+
+  /* --- Top bar (logo + search, always visible) --- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .logo-mark {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-family: 'Anton', sans-serif;
+    font-size: 30px;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .logo-text .accent { color: var(--accent); }
+
+  .search-row {
+    flex: 1;
+    min-width: 240px;
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border-radius: 999px;
+    padding: 4px 6px 4px 20px;
+  }
+
+  .search-row input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    color: var(--text-dark);
+    padding: 12px 8px;
+    background: transparent;
+    min-width: 0;
+  }
+
+  .search-row input::placeholder { color: #9A9A9A; }
+
+  .search-btn {
+    background: var(--bg);
+    color: var(--white);
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 17px;
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+  }
+
+  .search-btn:hover { background: var(--accent); }
+
+  /* --- Hero (landing state) --- */
+  .hero {
+    text-align: center;
+    padding: 60px 0 50px;
+  }
+
+  .hero-mark {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 68px;
+    margin: 0 auto 24px;
+  }
+
+  .hero-title {
+    font-family: 'Anton', sans-serif;
+    font-size: 56px;
+    letter-spacing: 0.01em;
+    margin: 0;
+  }
+
+  .hero-title .accent { color: var(--accent); }
+
+  .hero-tagline {
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    margin: 10px 0 34px;
+    text-transform: uppercase;
+  }
+
+  .hero-search {
+    max-width: 560px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border-radius: 999px;
+    padding: 4px 6px 4px 24px;
+  }
+
+  .hero-search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 19px;
+    color: var(--text-dark);
+    padding: 16px 8px;
+    background: transparent;
+    min-width: 0;
+  }
+
+  .hero-search input::placeholder { color: #9A9A9A; }
+
+  .hero-photo-strip {
+    margin-top: 50px;
+    height: 260px;
+    border-radius: 14px;
+    background-image:
+      linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 100%),
+      url('assets/header.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+
+  /* --- Results state --- */
+  .results-heading {
+    font-family: 'Anton', sans-serif;
+    font-size: 30px;
+    color: var(--accent);
+    letter-spacing: 0.01em;
+    margin: 44px 0 22px;
+    text-transform: uppercase;
+  }
+
+  .card {
+    display: flex;
+    gap: 24px;
+    background: var(--white);
+    border: 3px solid var(--card-border);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 22px;
+    color: var(--text-dark);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 0 26px rgba(255, 106, 19, 0.45);
+    transform: translateY(-2px);
+  }
+
+  .card-swatch {
+    width: 130px;
+    height: 130px;
+    border-radius: 10px;
+    border: 3px solid var(--accent);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    background: #F3F3F3;
+    overflow: hidden;
+  }
+
+  .card-swatch-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-body { flex: 1; min-width: 0; }
+
+  .card-title {
+    font-family: 'Anton', sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.005em;
+    margin: 0 0 4px;
+  }
+
+  .card-style {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 12px;
+  }
+
+  .card-desc {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-dark);
+    margin: 0;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--white);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .empty-state .examples {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 560px) {
+    .hero-title { font-size: 40px; }
+    .hero-mark { width: 100px; height: 100px; font-size: 48px; }
+    .card { flex-direction: column; }
+    .card-swatch { width: 100%; height: 160px; }
+    .hero-photo-strip { height: 180px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar hidden" id="topbar">
+    <div class="logo-mark"><svg width="23" height="31" viewBox="0 0 417.21 571.31" xmlns="http://www.w3.org/2000/svg">
+  <path fill="#231f20" d="M379.4,269.52c-108.36,0-216.71.01-325.07-.08-3.81,0-8.22,3.73-8.23,7.72,0,4.99,2.87,8.38,7.68,8.74,2.6.2,3.32.93,3.54,3.82.61,7.9,1.61,15.73,3.24,23.5,3.87,18.38,10.78,35.44,20.75,51.38,8.58,13.72,19.04,25.75,31.24,36.25,9.56,8.23,20.02,15.22,31.37,20.82,3.5,1.72,3.44,1.77,2.47,5.73-3.63,14.8-7.68,29.49-11.43,44.26-4.58,18.05-9.46,36.01-14,54.07-.98,3.89.55,8.56,5.49,10.08,3.95,1.22,8.78-1.89,9.81-6.26,3.29-13.91,7.17-27.66,10.7-41.51.77-3.02.61-3.57,4.61-3.57,41.89.02,83.77.01,125.66.01,3.73,0,4.25.39,5.18,4.1,3.39,13.49,7.04,26.92,10.43,40.42,1.74,6.94,8.13,8.68,12.81,5.22,3.49-2.58,3.22-6.2,2.36-9.56-1.81-7.03-3.84-14.02-5.6-21.07-3.86-15.4-7.96-30.75-11.9-46.13-2.39-9.32-4.58-18.71-7.49-27.91-.34-1.08-.53-2.33-.32-3.54l-1.37-.27c.55,0,1.2.2,1.62-.03,13.73-7.24,27.03-15.05,38.87-25.31,18.31-15.86,32.34-34.73,42-56.89,5.27-12.09,8.89-24.65,10.99-37.68.89-5.54,1.47-11.09,1.84-16.67.16-2.4.81-3.09,3.29-3.28,5.34-.39,7.8-3.38,7.65-9.29-.11-4.23-3.4-7.1-8.2-7.1ZM152.8,464.12l9.6-37.59s30.6,10,56.19,10,49.99-8.2,49.99-8.2l8.6,35.79h-124.38ZM219.49,420.14s100.11-11.89,107.29-131.21h23.61s4.11,122.99-130.91,131.21Z"/>
+  <path fill="#231f20" d="M262.84,172.08c-3.16-10.28-15.82-32.17-18.19-40.08-2.37-7.91-6.59-83.32-6.59-83.32l-2.37-17.67h3.43s-1.32-10.81-4.22-12.13c-2.87-1.3-10.45-2.9-19.9-2.9s-17.03,1.6-19.9,2.9c-2.9,1.32-4.22,12.13-4.22,12.13h3.43l-2.37,17.67s-4.22,75.41-6.59,83.32c-2.37,7.91-15.03,29.79-18.19,40.08-3.16,10.28-3.16,177.97-3.16,189.04s7.65,18.98,14.76,18.98h72.49c7.12,0,14.76-7.91,14.76-18.98s0-178.76-3.16-189.04ZM191.15,142.9c0-2.46,7.02-86.88,7.43-88.28s2.24-4.33,4.4-4.33,12.72.35,12.72.35c0,0-9.44.86-10.32,6.66-.88,5.8-6.33,72.24-6.33,78.92s8.79,9.67,8.79,9.67h-12.66c-4.39,0-4.04-.53-4.04-2.99ZM180.95,371.76c-7.73,0-7.38-13.01-7.38-13.01v-169.09c0-4.57,4.24-21.69,8.61-27.95,7.73-11.07,36.17-11.32,24.26-7.03-13.18,4.75-21.27,21.27-21.27,34.45s-.35,115.66-.35,145.72,2.99,29.53,6.5,31.99c3.52,2.46,31.11,4.92,31.11,4.92h-41.48ZM226.04,46.59s-26.06.14-27.46-.35,1.33-12.58,1.33-12.58l5.38-.49.21,11.18,20.54,1.26v.98ZM235.43,29.62h-3.15v-5.08h-3.1v5.08h-4.55v-5.08h-3.1v5.08h-4.55v-5.08h-3.1v5.08h-4.55v-5.08h-3.1v5.08h-4.55v-5.08h-3.1v5.08h-4.57s-.82-5.48,3.67-8.42c4.38-2.87,16.48-2.5,17.05-2.48.57-.02,12.66-.39,17.05,2.48,4.49,2.94,3.67,8.42,3.67,8.42Z"/>
+</svg></div>
+    <div class="logo-text">Bar<span class="accent">Beer</span>Que</div>
+    <div class="search-row">
+      <input type="text" id="searchInputTop" placeholder="BBQ or Beer?" autocomplete="off">
+      <button class="search-btn" id="searchBtnTop" aria-label="Search">&#128269;</button>
+    </div>
+  </div>
+
+  <div class="hero" id="hero">
+    <div class="hero-mark"><svg width="64" height="87" viewBox="0 0 417.21 571.31" xmlns="http://www.w3.org/2000/svg">
+  <path fill="#231f20" d="M379.4,269.52c-108.36,0-216.71.01-325.07-.08-3.81,0-8.22,3.73-8.23,7.72,0,4.99,2.87,8.38,7.68,8.74,2.6.2,3.32.93,3.54,3.82.61,7.9,1.61,15.73,3.24,23.5,3.87,18.38,10.78,35.44,20.75,51.38,8.58,13.72,19.04,25.75,31.24,36.25,9.56,8.23,20.02,15.22,31.37,20.82,3.5,1.72,3.44,1.77,2.47,5.73-3.63,14.8-7.68,29.49-11.43,44.26-4.58,18.05-9.46,36.01-14,54.07-.98,3.89.55,8.56,5.49,10.08,3.95,1.22,8.78-1.89,9.81-6.26,3.29-13.91,7.17-27.66,10.7-41.51.77-3.02.61-3.57,4.61-3.57,41.89.02,83.77.01,125.66.01,3.73,0,4.25.39,5.18,4.1,3.39,13.49,7.04,26.92,10.43,40.42,1.74,6.94,8.13,8.68,12.81,5.22,3.49-2.58,3.22-6.2,2.36-9.56-1.81-7.03-3.84-14.02-5.6-21.07-3.86-15.4-7.96-30.75-11.9-46.13-2.39-9.32-4.58-18.71-7.49-27.91-.34-1.08-.53-2.33-.32-3.54l-1.37-.27c.55,0,1.2.2,1.62-.03,13.73-7.24,27.03-15.05,38.87-25.31,18.31-15.86,32.34-34.73,42-56.89,5.27-12.09,8.89-24.65,10.99-37.68.89-5.54,1.47-11.09,1.84-16.67.16-2.4.81-3.09,3.29-3.28,5.34-.39,7.8-3.38,7.65-9.29-.11-4.23-3.4-7.1-8.2-7.1ZM152.8,464.12l9.6-37.59s30.6,10,56.19,10,49.99-8.2,49.99-8.2l8.6,35.79h-124.38ZM219.49,420.14s100.11-11.89,107.29-131.21h23.61s4.11,122.99-130.91,131.21Z"/>
+  <path fill="#231f20" d="M262.84,172.08c-3.16-10.28-15.82-32.17-18.19-40.08-2.37-7.91-6.59-83.32-6.59-83.32l-2.37-17.67h3.43s-1.32-10.81-4.22-12.13c-2.87-1.3-10.45-2.9-19.9-2.9s-17.03,1.6-19.9,2.9c-2.9,1.32-4.22,12.13-4.22,12.13h3.43l-2.37,17.67s-4.22,75.41-6.59,83.32c-2.37,7.91-15.03,29.79-18.19,40.08-3.16,10.28-3.16,177.97-3.16,189.04s7.65,18.98,14.76,18.98h72.49c7.12,0,14.76-7.91,14.76-18.98s0-178.76-3.16-189.04ZM191.15,142.9c0-2.46,7.02-86.88,7.43-88.28s2.24-4.33,4.4-4.33,12.72.35,12.72.35c0,0-9.44.86-10.32,6.66-.88,5.8-6.33,72.24-6.33,78.92s8.79,9.67,8.79,9.67h-12.66c-4.39,0-4.04-.53-4.04-2.99ZM180.95,371.76c-7.73,0-7.38-13.01-7.38-13.01v-169.09c0-4.57,4.24-21.69,8.61-27.95,7.73-11.07,36.17-11.32,24.26-7.03-13.18,4.75-21.27,21.27-21.27,34.45s-.35,115.66-.35,145.72,2.99,29.53,6.5,31.99c3.52,2.46,31.11,4.92,31.11,4.92h-41.48ZM226.04,46.59s-26.06.14-27.46-.35,1.33-12.58,1.33-12.58l5.38-.49.21,11.18,20.54,1.26v.98ZM235.43,29.62h-3.15v-5.08h-3.1v5.08h-4.55v-5.08h-3.1v5.08h-4.55v-5.08h-3.1v5.08h-4.55v-5.08h-3.1v5.08h-4.55v-5.08h-3.1v5.08h-4.57s-.82-5.48,3.67-8.42c4.38-2.87,16.48-2.5,17.05-2.48.57-.02,12.66-.39,17.05,2.48,4.49,2.94,3.67,8.42,3.67,8.42Z"/>
+</svg></div>
+    <h1 class="hero-title">Bar<span class="accent">Beer</span>Que</h1>
+    <div class="hero-tagline">Sizzle. Sip. Repeat.</div>
+    <div class="hero-search">
+      <input type="text" id="searchInputHero" placeholder="BBQ or Beer?" autocomplete="off">
+      <button class="search-btn" id="searchBtnHero" aria-label="Search">&#128269;</button>
+    </div>
+    <div class="hero-photo-strip"></div>
+  </div>
+
+  <div id="resultsSection" class="hidden">
+    <div class="results-heading">Pairing Results:</div>
+    <div id="cardsContainer"></div>
+  </div>
+
+</div>
+
+<script>
+  const DATA = {"food_names": ["Pulled Pork", "Brisket", "Beef Ribs", "Baby Back Ribs", "St. Louis Ribs", "BBQ Chicken", "Smoked Chicken Wings", "Buffalo Wings", "Grilled Chicken Breast", "Burnt Ends", "Cheeseburger", "Hot Dog", "Bratwurst", "Italian Sausage", "Grilled Shrimp", "Grilled Salmon", "BBQ Meatballs", "Grilled Corn on the Cob", "Baked Beans", "Coleslaw", "Mac and Cheese", "Cornbread", "Grilled Vegetables", "Smoked Turkey Leg", "Pork Belly Burnt Ends", "Filet Mignon", "Ribeye Steak", "Tri-Tip", "Carne Asada", "Al Pastor Tacos"], "beer_names": ["Budweiser", "Bud Light", "Miller Lite", "Coors Light", "Coors Banquet", "Michelob Ultra", "Yuengling Traditional Lager", "Modelo Especial", "Corona Extra", "Pacifico", "Dos Equis Lager Especial", "Tecate", "Heineken", "Stella Artois", "Blue Moon Belgian White", "Sam Adams Boston Lager", "Sam Adams Summer Ale", "Sierra Nevada Pale Ale", "Sierra Nevada Torpedo", "Lagunitas IPA", "Founders All Day IPA", "Bell's Two Hearted Ale", "Dogfish Head 60 Minute IPA", "Fat Tire", "Newcastle Brown Ale", "Shiner Bock", "Negra Modelo", "Guinness Draught", "Founders Porter", "Left Hand Milk Stout"], "food_to_beers": {"Pulled Pork": [{"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's dark chocolate bitterness and lively carbonation cut right through the richness of Pulled Pork, resetting your palate between bites."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "The crisp snap of Guinness Draught slices through the fat in Pulled Pork instead of getting weighed down by it."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "The smooth character in Left Hand Milk Stout echoes the smoky character of Pulled Pork rather than competing with it -- smoke meeting roast."}], "Brisket": [{"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's rich bitterness and lively carbonation cut right through the richness of Brisket, resetting your palate between bites."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "Guinness Draught's roasted coffee bitterness and lively carbonation cut right through the richness of Brisket, resetting your palate between bites."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "The chocolate character in Left Hand Milk Stout echoes the beefy character of Brisket rather than competing with it -- smoke meeting roast."}], "Beef Ribs": [{"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's rich bitterness and lively carbonation cut right through the richness of Beef Ribs, resetting your palate between bites."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "The crisp snap of Guinness Draught slices through the fat in Beef Ribs instead of getting weighed down by it."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "Left Hand Milk Stout's deeper malt character mirrors the char and smoke in Beef Ribs, so the flavors build on each other instead of clashing."}], "Baby Back Ribs": [{"name": "Founders Porter", "style": "Robust Porter", "description": "The crisp snap of Founders Porter slices through the fat in Baby Back Ribs instead of getting weighed down by it."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "The chocolate character in Left Hand Milk Stout echoes the tender character of Baby Back Ribs rather than competing with it -- smoke meeting roast."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "Guinness Draught's roasted coffee bitterness and lively carbonation cut right through the richness of Baby Back Ribs, resetting your palate between bites."}], "St. Louis Ribs": [{"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's roasted bitterness and lively carbonation cut right through the richness of St. Louis Ribs, resetting your palate between bites."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "Left Hand Milk Stout's deeper malt character mirrors the char and smoke in St. Louis Ribs, so the flavors build on each other instead of clashing."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "The crisp snap of Guinness Draught slices through the fat in St. Louis Ribs instead of getting weighed down by it."}], "BBQ Chicken": [{"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's deeper malt character mirrors the char and smoke in BBQ Chicken, so the flavors build on each other instead of clashing."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "Left Hand Milk Stout's deeper malt character mirrors the char and smoke in BBQ Chicken, so the flavors build on each other instead of clashing."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "Guinness Draught's deeper malt character mirrors the char and smoke in BBQ Chicken, so the flavors build on each other instead of clashing."}], "Smoked Chicken Wings": [{"name": "Founders Porter", "style": "Robust Porter", "description": "The dark chocolate character in Founders Porter echoes the savory character of Smoked Chicken Wings rather than competing with it -- smoke meeting roast."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "The creamy character in Guinness Draught echoes the smoky character of Smoked Chicken Wings rather than competing with it -- smoke meeting roast."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "The chocolate character in Left Hand Milk Stout echoes the crisp skin character of Smoked Chicken Wings rather than competing with it -- smoke meeting roast."}], "Buffalo Wings": [{"name": "Coors Light", "style": "American Light Lager", "description": "Instead of amplifying the heat, Coors Light stays light and refreshing against Buffalo Wings's kick."}, {"name": "Bud Light", "style": "American Light Lager", "description": "Instead of amplifying the heat, Bud Light stays light and refreshing against Buffalo Wings's kick."}, {"name": "Miller Lite", "style": "American Light Lager", "description": "Instead of amplifying the heat, Miller Lite stays light and refreshing against Buffalo Wings's kick."}], "Grilled Chicken Breast": [{"name": "Bud Light", "style": "American Light Lager", "description": "Bud Light's easy, easy-drinking character matches the lighter side of Grilled Chicken Breast instead of overpowering it."}, {"name": "Miller Lite", "style": "American Light Lager", "description": "Both Grilled Chicken Breast and Miller Lite stay light and clean, so the more delicate flavors here don't get overwhelmed."}, {"name": "Coors Light", "style": "American Light Lager", "description": "Both Grilled Chicken Breast and Coors Light stay light and clean, so the more delicate flavors here don't get overwhelmed."}], "Burnt Ends": [{"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's dark chocolate bitterness and lively carbonation cut right through the richness of Burnt Ends, resetting your palate between bites."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "Left Hand Milk Stout's deeper malt character mirrors the char and smoke in Burnt Ends, so the flavors build on each other instead of clashing."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "Guinness Draught's dry finish bitterness and lively carbonation cut right through the richness of Burnt Ends, resetting your palate between bites."}], "Cheeseburger": [{"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's dark chocolate bitterness and lively carbonation cut right through the richness of Cheeseburger, resetting your palate between bites."}, {"name": "Sierra Nevada Torpedo", "style": "American IPA", "description": "The crisp snap of Sierra Nevada Torpedo slices through the fat in Cheeseburger instead of getting weighed down by it."}, {"name": "Bell's Two Hearted Ale", "style": "American IPA", "description": "Bell's Two Hearted Ale's bold grapefruit hops bitterness and lively carbonation cut right through the richness of Cheeseburger, resetting your palate between bites."}], "Hot Dog": [{"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "Guinness Draught's roasted coffee profile gives Hot Dog a solid, well-rounded match without pulling focus from either one."}, {"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's roasted profile gives Hot Dog a solid, well-rounded match without pulling focus from either one."}, {"name": "Sierra Nevada Torpedo", "style": "American IPA", "description": "The crisp snap of Sierra Nevada Torpedo slices through the fat in Hot Dog instead of getting weighed down by it."}], "Bratwurst": [{"name": "Sierra Nevada Torpedo", "style": "American IPA", "description": "Sierra Nevada Torpedo's big hop bitterness bitterness and lively carbonation cut right through the richness of Bratwurst, resetting your palate between bites."}, {"name": "Bell's Two Hearted Ale", "style": "American IPA", "description": "The crisp snap of Bell's Two Hearted Ale slices through the fat in Bratwurst instead of getting weighed down by it."}, {"name": "Lagunitas IPA", "style": "American IPA", "description": "The crisp snap of Lagunitas IPA slices through the fat in Bratwurst instead of getting weighed down by it."}], "Italian Sausage": [{"name": "Sierra Nevada Torpedo", "style": "American IPA", "description": "The crisp snap of Sierra Nevada Torpedo slices through the fat in Italian Sausage instead of getting weighed down by it."}, {"name": "Bell's Two Hearted Ale", "style": "American IPA", "description": "The crisp snap of Bell's Two Hearted Ale slices through the fat in Italian Sausage instead of getting weighed down by it."}, {"name": "Lagunitas IPA", "style": "American IPA", "description": "Lagunitas IPA's hoppy bitterness and lively carbonation cut right through the richness of Italian Sausage, resetting your palate between bites."}], "Grilled Shrimp": [{"name": "Bud Light", "style": "American Light Lager", "description": "Both Grilled Shrimp and Bud Light stay light and clean, so the more delicate flavors here don't get overwhelmed."}, {"name": "Miller Lite", "style": "American Light Lager", "description": "Both Grilled Shrimp and Miller Lite stay light and clean, so the more delicate flavors here don't get overwhelmed."}, {"name": "Coors Light", "style": "American Light Lager", "description": "Coors Light's easy, light character matches the lighter side of Grilled Shrimp instead of overpowering it."}], "Grilled Salmon": [{"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "Guinness Draught's dry finish profile gives Grilled Salmon a solid, well-rounded match without pulling focus from either one."}, {"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's rich profile gives Grilled Salmon a solid, well-rounded match without pulling focus from either one."}, {"name": "Sierra Nevada Torpedo", "style": "American IPA", "description": "The crisp snap of Sierra Nevada Torpedo slices through the fat in Grilled Salmon instead of getting weighed down by it."}], "BBQ Meatballs": [{"name": "Sierra Nevada Torpedo", "style": "American IPA", "description": "Sierra Nevada Torpedo's grapefruit bitterness and lively carbonation cut right through the richness of BBQ Meatballs, resetting your palate between bites."}, {"name": "Bell's Two Hearted Ale", "style": "American IPA", "description": "Bell's Two Hearted Ale's balanced malt bitterness and lively carbonation cut right through the richness of BBQ Meatballs, resetting your palate between bites."}, {"name": "Lagunitas IPA", "style": "American IPA", "description": "The crisp snap of Lagunitas IPA slices through the fat in BBQ Meatballs instead of getting weighed down by it."}], "Grilled Corn on the Cob": [{"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "Left Hand Milk Stout's malt sweetness sits right alongside Grilled Corn on the Cob's own buttery character without either one overpowering the other."}, {"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's malt sweetness sits right alongside Grilled Corn on the Cob's own buttery character without either one overpowering the other."}, {"name": "Negra Modelo", "style": "Munich Dunkel / Dark Lager", "description": "Negra Modelo's malt sweetness sits right alongside Grilled Corn on the Cob's own charred character without either one overpowering the other."}], "Baked Beans": [{"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "Left Hand Milk Stout's malt sweetness sits right alongside Baked Beans's own smoky character without either one overpowering the other."}, {"name": "Founders Porter", "style": "Robust Porter", "description": "The sweetness in Founders Porter plays well with Baked Beans's sweet edge, rather than fighting it."}, {"name": "Negra Modelo", "style": "Munich Dunkel / Dark Lager", "description": "The sweetness in Negra Modelo plays well with Baked Beans's sweet edge, rather than fighting it."}], "Coleslaw": [{"name": "Blue Moon Belgian White", "style": "Witbier", "description": "Both Coleslaw and Blue Moon Belgian White stay light and clean, so the more delicate flavors here don't get overwhelmed."}, {"name": "Budweiser", "style": "American Lager", "description": "Both Coleslaw and Budweiser stay light and clean, so the more delicate flavors here don't get overwhelmed."}, {"name": "Bud Light", "style": "American Light Lager", "description": "Bud Light's easy, ultra-light character matches the lighter side of Coleslaw instead of overpowering it."}], "Mac and Cheese": [{"name": "Sierra Nevada Torpedo", "style": "American IPA", "description": "Sierra Nevada Torpedo's big hop bitterness bitterness and lively carbonation cut right through the richness of Mac and Cheese, resetting your palate between bites."}, {"name": "Lagunitas IPA", "style": "American IPA", "description": "The crisp snap of Lagunitas IPA slices through the fat in Mac and Cheese instead of getting weighed down by it."}, {"name": "Bell's Two Hearted Ale", "style": "American IPA", "description": "The crisp snap of Bell's Two Hearted Ale slices through the fat in Mac and Cheese instead of getting weighed down by it."}], "Cornbread": [{"name": "Sierra Nevada Torpedo", "style": "American IPA", "description": "The crisp snap of Sierra Nevada Torpedo slices through the fat in Cornbread instead of getting weighed down by it."}, {"name": "Bell's Two Hearted Ale", "style": "American IPA", "description": "Bell's Two Hearted Ale's smooth bitterness bitterness and lively carbonation cut right through the richness of Cornbread, resetting your palate between bites."}, {"name": "Lagunitas IPA", "style": "American IPA", "description": "The crisp snap of Lagunitas IPA slices through the fat in Cornbread instead of getting weighed down by it."}], "Grilled Vegetables": [{"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's deeper malt character mirrors the char and smoke in Grilled Vegetables, so the flavors build on each other instead of clashing."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "Left Hand Milk Stout's deeper malt character mirrors the char and smoke in Grilled Vegetables, so the flavors build on each other instead of clashing."}, {"name": "Newcastle Brown Ale", "style": "English Brown Ale", "description": "The nutty character in Newcastle Brown Ale echoes the charred character of Grilled Vegetables rather than competing with it -- smoke meeting roast."}], "Smoked Turkey Leg": [{"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "The dry finish character in Guinness Draught echoes the lean-ish character of Smoked Turkey Leg rather than competing with it -- smoke meeting roast."}, {"name": "Founders Porter", "style": "Robust Porter", "description": "The rich character in Founders Porter echoes the smoky character of Smoked Turkey Leg rather than competing with it -- smoke meeting roast."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "The chocolate character in Left Hand Milk Stout echoes the lean-ish character of Smoked Turkey Leg rather than competing with it -- smoke meeting roast."}], "Pork Belly Burnt Ends": [{"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's dark chocolate bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "The creamy sweet character in Left Hand Milk Stout echoes the intensely rich character of Pork Belly Burnt Ends rather than competing with it -- smoke meeting roast."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "Guinness Draught's creamy bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}], "Filet Mignon": [{"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's deeper malt character mirrors the char and smoke in Filet Mignon, so the flavors build on each other instead of clashing."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "The dry finish character in Guinness Draught echoes the mild character of Filet Mignon rather than competing with it -- smoke meeting roast."}, {"name": "Sierra Nevada Torpedo", "style": "American IPA", "description": "The crisp snap of Sierra Nevada Torpedo slices through the fat in Filet Mignon instead of getting weighed down by it."}], "Ribeye Steak": [{"name": "Founders Porter", "style": "Robust Porter", "description": "The crisp snap of Founders Porter slices through the fat in Ribeye Steak instead of getting weighed down by it."}, {"name": "Sierra Nevada Torpedo", "style": "American IPA", "description": "Sierra Nevada Torpedo's resinous bitterness and lively carbonation cut right through the richness of Ribeye Steak, resetting your palate between bites."}, {"name": "Bell's Two Hearted Ale", "style": "American IPA", "description": "The crisp snap of Bell's Two Hearted Ale slices through the fat in Ribeye Steak instead of getting weighed down by it."}], "Tri-Tip": [{"name": "Founders Porter", "style": "Robust Porter", "description": "Founders Porter's deeper malt character mirrors the char and smoke in Tri-Tip, so the flavors build on each other instead of clashing."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "The roasted coffee character in Guinness Draught echoes the peppery crust character of Tri-Tip rather than competing with it -- smoke meeting roast."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "Left Hand Milk Stout's deeper malt character mirrors the char and smoke in Tri-Tip, so the flavors build on each other instead of clashing."}], "Carne Asada": [{"name": "Founders Porter", "style": "Robust Porter", "description": "The dark chocolate character in Founders Porter echoes the savory character of Carne Asada rather than competing with it -- smoke meeting roast."}, {"name": "Guinness Draught", "style": "Irish Dry Stout", "description": "Guinness Draught's deeper malt character mirrors the char and smoke in Carne Asada, so the flavors build on each other instead of clashing."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "The creamy sweet character in Left Hand Milk Stout echoes the charred character of Carne Asada rather than competing with it -- smoke meeting roast."}], "Al Pastor Tacos": [{"name": "Founders Porter", "style": "Robust Porter", "description": "The dark chocolate character in Founders Porter echoes the charred pineapple-sweet character of Al Pastor Tacos rather than competing with it -- smoke meeting roast."}, {"name": "Negra Modelo", "style": "Munich Dunkel / Dark Lager", "description": "The caramel character in Negra Modelo echoes the savory character of Al Pastor Tacos rather than competing with it -- smoke meeting roast."}, {"name": "Left Hand Milk Stout", "style": "Milk Stout", "description": "The chocolate character in Left Hand Milk Stout echoes the spiced character of Al Pastor Tacos rather than competing with it -- smoke meeting roast."}]}, "beer_to_foods": {"Budweiser": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Budweiser's light-bodied bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Budweiser slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Buffalo Wings", "style": "BBQ", "description": "Budweiser's crisp profile cools the heat in Buffalo Wings -- a hop-forward beer would only pour gasoline on that spice."}], "Bud Light": [{"name": "Buffalo Wings", "style": "BBQ", "description": "Bud Light's crisp profile cools the heat in Buffalo Wings -- a hop-forward beer would only pour gasoline on that spice."}, {"name": "Al Pastor Tacos", "style": "Grill", "description": "Instead of amplifying the heat, Bud Light stays light and refreshing against Al Pastor Tacos's kick."}, {"name": "BBQ Chicken", "style": "BBQ", "description": "Bud Light's easy, ultra-light character matches the lighter side of BBQ Chicken instead of overpowering it."}], "Miller Lite": [{"name": "Buffalo Wings", "style": "BBQ", "description": "Instead of amplifying the heat, Miller Lite stays light and refreshing against Buffalo Wings's kick."}, {"name": "Al Pastor Tacos", "style": "Grill", "description": "Miller Lite's refreshing profile cools the heat in Al Pastor Tacos -- a hop-forward beer would only pour gasoline on that spice."}, {"name": "BBQ Chicken", "style": "BBQ", "description": "Both BBQ Chicken and Miller Lite stay light and clean, so the more delicate flavors here don't get overwhelmed."}], "Coors Light": [{"name": "Buffalo Wings", "style": "BBQ", "description": "Instead of amplifying the heat, Coors Light stays light and refreshing against Buffalo Wings's kick."}, {"name": "Al Pastor Tacos", "style": "Grill", "description": "Coors Light's very crisp profile cools the heat in Al Pastor Tacos -- a hop-forward beer would only pour gasoline on that spice."}, {"name": "Brisket", "style": "BBQ", "description": "Coors Light's very crisp bitterness and lively carbonation cut right through the richness of Brisket, resetting your palate between bites."}], "Coors Banquet": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Coors Banquet's clean bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Coors Banquet slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Buffalo Wings", "style": "BBQ", "description": "Coors Banquet's clean profile cools the heat in Buffalo Wings -- a hop-forward beer would only pour gasoline on that spice."}], "Michelob Ultra": [{"name": "Buffalo Wings", "style": "BBQ", "description": "Michelob Ultra's neutral profile cools the heat in Buffalo Wings -- a hop-forward beer would only pour gasoline on that spice."}, {"name": "Al Pastor Tacos", "style": "Grill", "description": "Instead of amplifying the heat, Michelob Ultra stays light and refreshing against Al Pastor Tacos's kick."}, {"name": "BBQ Chicken", "style": "BBQ", "description": "Michelob Ultra's easy, dry character matches the lighter side of BBQ Chicken instead of overpowering it."}], "Yuengling Traditional Lager": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The crisp snap of Yuengling Traditional Lager slices through the fat in Pork Belly Burnt Ends instead of getting weighed down by it."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Yuengling Traditional Lager slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Baby Back Ribs", "style": "BBQ", "description": "Yuengling Traditional Lager's deeper malt character mirrors the char and smoke in Baby Back Ribs, so the flavors build on each other instead of clashing."}], "Modelo Especial": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Modelo Especial's crisp bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}, {"name": "Burnt Ends", "style": "BBQ", "description": "Modelo Especial's crisp bitterness and lively carbonation cut right through the richness of Burnt Ends, resetting your palate between bites."}, {"name": "Buffalo Wings", "style": "BBQ", "description": "Modelo Especial's citrus-friendly profile cools the heat in Buffalo Wings -- a hop-forward beer would only pour gasoline on that spice."}], "Corona Extra": [{"name": "Buffalo Wings", "style": "BBQ", "description": "Corona Extra's crisp profile cools the heat in Buffalo Wings -- a hop-forward beer would only pour gasoline on that spice."}, {"name": "Al Pastor Tacos", "style": "Grill", "description": "Corona Extra's crisp profile cools the heat in Al Pastor Tacos -- a hop-forward beer would only pour gasoline on that spice."}, {"name": "BBQ Chicken", "style": "BBQ", "description": "Both BBQ Chicken and Corona Extra stay light and clean, so the more delicate flavors here don't get overwhelmed."}], "Pacifico": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The crisp snap of Pacifico slices through the fat in Pork Belly Burnt Ends instead of getting weighed down by it."}, {"name": "Burnt Ends", "style": "BBQ", "description": "Pacifico's refreshing bitterness and lively carbonation cut right through the richness of Burnt Ends, resetting your palate between bites."}, {"name": "Buffalo Wings", "style": "BBQ", "description": "Instead of amplifying the heat, Pacifico stays light and refreshing against Buffalo Wings's kick."}], "Dos Equis Lager Especial": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Dos Equis Lager Especial's lightly toasty bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}, {"name": "Burnt Ends", "style": "BBQ", "description": "Dos Equis Lager Especial's crisp bitterness and lively carbonation cut right through the richness of Burnt Ends, resetting your palate between bites."}, {"name": "Buffalo Wings", "style": "BBQ", "description": "Dos Equis Lager Especial's lightly toasty profile cools the heat in Buffalo Wings -- a hop-forward beer would only pour gasoline on that spice."}], "Tecate": [{"name": "Buffalo Wings", "style": "BBQ", "description": "Tecate's minerally profile cools the heat in Buffalo Wings -- a hop-forward beer would only pour gasoline on that spice."}, {"name": "Al Pastor Tacos", "style": "Grill", "description": "Tecate's minerally profile cools the heat in Al Pastor Tacos -- a hop-forward beer would only pour gasoline on that spice."}, {"name": "Brisket", "style": "BBQ", "description": "The crisp snap of Tecate slices through the fat in Brisket instead of getting weighed down by it."}], "Heineken": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The crisp snap of Heineken slices through the fat in Pork Belly Burnt Ends instead of getting weighed down by it."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Heineken slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Ribeye Steak", "style": "Steak", "description": "Heineken's lightly bitter bitterness and lively carbonation cut right through the richness of Ribeye Steak, resetting your palate between bites."}], "Stella Artois": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The crisp snap of Stella Artois slices through the fat in Pork Belly Burnt Ends instead of getting weighed down by it."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Stella Artois slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Ribeye Steak", "style": "Steak", "description": "The crisp snap of Stella Artois slices through the fat in Ribeye Steak instead of getting weighed down by it."}], "Blue Moon Belgian White": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Blue Moon Belgian White's malt sweetness sits right alongside Pork Belly Burnt Ends's own smoky character without either one overpowering the other."}, {"name": "Al Pastor Tacos", "style": "Grill", "description": "Blue Moon Belgian White's smooth profile cools the heat in Al Pastor Tacos -- a hop-forward beer would only pour gasoline on that spice."}, {"name": "BBQ Chicken", "style": "BBQ", "description": "Blue Moon Belgian White's easy, smooth character matches the lighter side of BBQ Chicken instead of overpowering it."}], "Sam Adams Boston Lager": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Sam Adams Boston Lager's balanced hops bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}, {"name": "Burnt Ends", "style": "BBQ", "description": "Sam Adams Boston Lager's balanced hops bitterness and lively carbonation cut right through the richness of Burnt Ends, resetting your palate between bites."}, {"name": "Baby Back Ribs", "style": "BBQ", "description": "Sam Adams Boston Lager's balanced hops bitterness and lively carbonation cut right through the richness of Baby Back Ribs, resetting your palate between bites."}], "Sam Adams Summer Ale": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Sam Adams Summer Ale's light bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Sam Adams Summer Ale slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Al Pastor Tacos", "style": "Grill", "description": "Sam Adams Summer Ale's citrus profile cools the heat in Al Pastor Tacos -- a hop-forward beer would only pour gasoline on that spice."}], "Sierra Nevada Pale Ale": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Sierra Nevada Pale Ale's citrus bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}, {"name": "Burnt Ends", "style": "BBQ", "description": "Sierra Nevada Pale Ale's balanced malt bitterness and lively carbonation cut right through the richness of Burnt Ends, resetting your palate between bites."}, {"name": "Baby Back Ribs", "style": "BBQ", "description": "The crisp snap of Sierra Nevada Pale Ale slices through the fat in Baby Back Ribs instead of getting weighed down by it."}], "Sierra Nevada Torpedo": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Sierra Nevada Torpedo's grapefruit bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}, {"name": "Burnt Ends", "style": "BBQ", "description": "Sierra Nevada Torpedo's grapefruit bitterness and lively carbonation cut right through the richness of Burnt Ends, resetting your palate between bites."}, {"name": "Baby Back Ribs", "style": "BBQ", "description": "The crisp snap of Sierra Nevada Torpedo slices through the fat in Baby Back Ribs instead of getting weighed down by it."}], "Lagunitas IPA": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The crisp snap of Lagunitas IPA slices through the fat in Pork Belly Burnt Ends instead of getting weighed down by it."}, {"name": "Burnt Ends", "style": "BBQ", "description": "Lagunitas IPA's hoppy bitterness and lively carbonation cut right through the richness of Burnt Ends, resetting your palate between bites."}, {"name": "Ribeye Steak", "style": "Steak", "description": "Lagunitas IPA's citrus-pine bitterness and lively carbonation cut right through the richness of Ribeye Steak, resetting your palate between bites."}], "Founders All Day IPA": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The crisp snap of Founders All Day IPA slices through the fat in Pork Belly Burnt Ends instead of getting weighed down by it."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Founders All Day IPA slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Ribeye Steak", "style": "Steak", "description": "The crisp snap of Founders All Day IPA slices through the fat in Ribeye Steak instead of getting weighed down by it."}], "Bell's Two Hearted Ale": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The crisp snap of Bell's Two Hearted Ale slices through the fat in Pork Belly Burnt Ends instead of getting weighed down by it."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Bell's Two Hearted Ale slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Baby Back Ribs", "style": "BBQ", "description": "The crisp snap of Bell's Two Hearted Ale slices through the fat in Baby Back Ribs instead of getting weighed down by it."}], "Dogfish Head 60 Minute IPA": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The crisp snap of Dogfish Head 60 Minute IPA slices through the fat in Pork Belly Burnt Ends instead of getting weighed down by it."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Dogfish Head 60 Minute IPA slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Ribeye Steak", "style": "Steak", "description": "Dogfish Head 60 Minute IPA's citrus-pine bitterness and lively carbonation cut right through the richness of Ribeye Steak, resetting your palate between bites."}], "Fat Tire": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Fat Tire's biscuity bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Fat Tire slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Baby Back Ribs", "style": "BBQ", "description": "The biscuity character in Fat Tire echoes the tender character of Baby Back Ribs rather than competing with it -- smoke meeting roast."}], "Newcastle Brown Ale": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The smooth malt character in Newcastle Brown Ale echoes the candied character of Pork Belly Burnt Ends rather than competing with it -- smoke meeting roast."}, {"name": "Burnt Ends", "style": "BBQ", "description": "Newcastle Brown Ale's deeper malt character mirrors the char and smoke in Burnt Ends, so the flavors build on each other instead of clashing."}, {"name": "Baby Back Ribs", "style": "BBQ", "description": "Newcastle Brown Ale's deeper malt character mirrors the char and smoke in Baby Back Ribs, so the flavors build on each other instead of clashing."}], "Shiner Bock": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The crisp snap of Shiner Bock slices through the fat in Pork Belly Burnt Ends instead of getting weighed down by it."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Shiner Bock slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Baby Back Ribs", "style": "BBQ", "description": "The lightly sweet character in Shiner Bock echoes the smoky-sweet character of Baby Back Ribs rather than competing with it -- smoke meeting roast."}], "Negra Modelo": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The crisp snap of Negra Modelo slices through the fat in Pork Belly Burnt Ends instead of getting weighed down by it."}, {"name": "Burnt Ends", "style": "BBQ", "description": "Negra Modelo's smooth bitterness and lively carbonation cut right through the richness of Burnt Ends, resetting your palate between bites."}, {"name": "Baby Back Ribs", "style": "BBQ", "description": "Negra Modelo's deeper malt character mirrors the char and smoke in Baby Back Ribs, so the flavors build on each other instead of clashing."}], "Guinness Draught": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Guinness Draught's creamy bitterness and lively carbonation cut right through the richness of Pork Belly Burnt Ends, resetting your palate between bites."}, {"name": "Burnt Ends", "style": "BBQ", "description": "Guinness Draught's creamy bitterness and lively carbonation cut right through the richness of Burnt Ends, resetting your palate between bites."}, {"name": "Brisket", "style": "BBQ", "description": "The crisp snap of Guinness Draught slices through the fat in Brisket instead of getting weighed down by it."}], "Founders Porter": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "The crisp snap of Founders Porter slices through the fat in Pork Belly Burnt Ends instead of getting weighed down by it."}, {"name": "Burnt Ends", "style": "BBQ", "description": "The crisp snap of Founders Porter slices through the fat in Burnt Ends instead of getting weighed down by it."}, {"name": "Brisket", "style": "BBQ", "description": "Founders Porter's roasted bitterness and lively carbonation cut right through the richness of Brisket, resetting your palate between bites."}], "Left Hand Milk Stout": [{"name": "Pork Belly Burnt Ends", "style": "BBQ", "description": "Left Hand Milk Stout's deeper malt character mirrors the char and smoke in Pork Belly Burnt Ends, so the flavors build on each other instead of clashing."}, {"name": "Burnt Ends", "style": "BBQ", "description": "Left Hand Milk Stout's deeper malt character mirrors the char and smoke in Burnt Ends, so the flavors build on each other instead of clashing."}, {"name": "Baby Back Ribs", "style": "BBQ", "description": "The chocolate character in Left Hand Milk Stout echoes the glazed character of Baby Back Ribs rather than competing with it -- smoke meeting roast."}]}, "food_emoji": {"Pulled Pork": "\ud83c\udf56", "Brisket": "\ud83e\udd69", "Beef Ribs": "\ud83c\udf56", "Baby Back Ribs": "\ud83c\udf56", "St. Louis Ribs": "\ud83c\udf56", "BBQ Chicken": "\ud83c\udf57", "Smoked Chicken Wings": "\ud83c\udf57", "Buffalo Wings": "\ud83c\udf57", "Grilled Chicken Breast": "\ud83c\udf57", "Burnt Ends": "\ud83e\udd69", "Cheeseburger": "\ud83c\udf54", "Hot Dog": "\ud83c\udf2d", "Bratwurst": "\ud83c\udf2d", "Italian Sausage": "\ud83c\udf2d", "Grilled Shrimp": "\ud83c\udf64", "Grilled Salmon": "\ud83d\udc1f", "BBQ Meatballs": "\ud83c\udf56", "Grilled Corn on the Cob": "\ud83c\udf3d", "Baked Beans": "\ud83e\uded8", "Coleslaw": "\ud83e\udd57", "Mac and Cheese": "\ud83e\uddc0", "Cornbread": "\ud83c\udf5e", "Grilled Vegetables": "\ud83e\udd66", "Smoked Turkey Leg": "\ud83c\udf57", "Pork Belly Burnt Ends": "\ud83e\udd53", "Filet Mignon": "\ud83e\udd69", "Ribeye Steak": "\ud83e\udd69", "Tri-Tip": "\ud83e\udd69", "Carne Asada": "\ud83c\udf2e", "Al Pastor Tacos": "\ud83c\udf2e"}, "beer_swatch": {"Budweiser": "#E8C468", "Bud Light": "#E8C468", "Miller Lite": "#E8C468", "Coors Light": "#E8C468", "Coors Banquet": "#E8C468", "Michelob Ultra": "#E8C468", "Yuengling Traditional Lager": "#C99A3D", "Modelo Especial": "#E8C468", "Corona Extra": "#E8C468", "Pacifico": "#E8C468", "Dos Equis Lager Especial": "#E8C468", "Tecate": "#E8C468", "Heineken": "#E8C468", "Stella Artois": "#E8C468", "Blue Moon Belgian White": "#E8C468", "Sam Adams Boston Lager": "#C99A3D", "Sam Adams Summer Ale": "#E8C468", "Sierra Nevada Pale Ale": "#D98C1F", "Sierra Nevada Torpedo": "#D98C1F", "Lagunitas IPA": "#D98C1F", "Founders All Day IPA": "#D98C1F", "Bell's Two Hearted Ale": "#D98C1F", "Dogfish Head 60 Minute IPA": "#D98C1F", "Fat Tire": "#8A4B1F", "Newcastle Brown Ale": "#8A4B1F", "Shiner Bock": "#8A4B1F", "Negra Modelo": "#8A4B1F", "Guinness Draught": "#2B1810", "Founders Porter": "#2B1810", "Left Hand Milk Stout": "#2B1810"}, "food_slug": {"Pulled Pork": "pulled-pork", "Brisket": "brisket", "Beef Ribs": "beef-ribs", "Baby Back Ribs": "baby-back-ribs", "St. Louis Ribs": "st-louis-ribs", "BBQ Chicken": "bbq-chicken", "Smoked Chicken Wings": "smoked-chicken-wings", "Buffalo Wings": "buffalo-wings", "Grilled Chicken Breast": "grilled-chicken-breast", "Burnt Ends": "burnt-ends", "Cheeseburger": "cheeseburger", "Hot Dog": "hot-dog", "Bratwurst": "bratwurst", "Italian Sausage": "italian-sausage", "Grilled Shrimp": "grilled-shrimp", "Grilled Salmon": "grilled-salmon", "BBQ Meatballs": "bbq-meatballs", "Grilled Corn on the Cob": "grilled-corn-on-the-cob", "Baked Beans": "baked-beans", "Coleslaw": "coleslaw", "Mac and Cheese": "mac-and-cheese", "Cornbread": "cornbread", "Grilled Vegetables": "grilled-vegetables", "Smoked Turkey Leg": "smoked-turkey-leg", "Pork Belly Burnt Ends": "pork-belly-burnt-ends", "Filet Mignon": "filet-mignon", "Ribeye Steak": "ribeye-steak", "Tri-Tip": "tri-tip", "Carne Asada": "carne-asada", "Al Pastor Tacos": "al-pastor-tacos"}, "beer_slug": {"Budweiser": "budweiser", "Bud Light": "bud-light", "Miller Lite": "miller-lite", "Coors Light": "coors-light", "Coors Banquet": "coors-banquet", "Michelob Ultra": "michelob-ultra", "Yuengling Traditional Lager": "yuengling-traditional-lager", "Modelo Especial": "modelo-especial", "Corona Extra": "corona-extra", "Pacifico": "pacifico", "Dos Equis Lager Especial": "dos-equis-lager-especial", "Tecate": "tecate", "Heineken": "heineken", "Stella Artois": "stella-artois", "Blue Moon Belgian White": "blue-moon-belgian-white", "Sam Adams Boston Lager": "sam-adams-boston-lager", "Sam Adams Summer Ale": "sam-adams-summer-ale", "Sierra Nevada Pale Ale": "sierra-nevada-pale-ale", "Sierra Nevada Torpedo": "sierra-nevada-torpedo", "Lagunitas IPA": "lagunitas-ipa", "Founders All Day IPA": "founders-all-day-ipa", "Bell's Two Hearted Ale": "bell-s-two-hearted-ale", "Dogfish Head 60 Minute IPA": "dogfish-head-60-minute-ipa", "Fat Tire": "fat-tire", "Newcastle Brown Ale": "newcastle-brown-ale", "Shiner Bock": "shiner-bock", "Negra Modelo": "negra-modelo", "Guinness Draught": "guinness-draught", "Founders Porter": "founders-porter", "Left Hand Milk Stout": "left-hand-milk-stout"}, "food_images": {}, "beer_images": {}};
+
+  const hero = document.getElementById('hero');
+  const topbar = document.getElementById('topbar');
+  const resultsSection = document.getElementById('resultsSection');
+  const cardsContainer = document.getElementById('cardsContainer');
+
+  function normalize(s) {
+    return s.trim().toLowerCase();
+  }
+
+  function findMatch(query, names) {
+    const q = normalize(query);
+    if (!q) return null;
+    for (const name of names) {
+      if (normalize(name) === q) return name;
+    }
+    for (const name of names) {
+      if (normalize(name).includes(q)) return name;
+    }
+    return null;
+  }
+
+  function beerSwatch(name) {
+    const realPhoto = DATA.beer_images[name];
+    if (realPhoto) {
+      return `<div class="card-swatch card-swatch-photo"><img src="${realPhoto}" alt="${name}"></div>`;
+    }
+    const color = DATA.beer_swatch[name] || '#C99A3D';
+    return `<div class="card-swatch" style="background:${color}22; border-color:${color};">🍺</div>`;
+  }
+
+  function foodSwatch(name) {
+    const realPhoto = DATA.food_images[name];
+    if (realPhoto) {
+      return `<div class="card-swatch card-swatch-photo"><img src="${realPhoto}" alt="${name}"></div>`;
+    }
+    const emoji = DATA.food_emoji[name] || '🍖';
+    return `<div class="card-swatch">${emoji}</div>`;
+  }
+
+  function renderResults(items, kind) {
+    cardsContainer.innerHTML = '';
+    items.forEach((item, i) => {
+      const swatch = kind === 'beer' ? beerSwatch(item.name) : foodSwatch(item.name);
+      const label = kind === 'beer' ? 'Beer Suggestion' : 'BBQ Suggestion';
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        ${swatch}
+        <div class="card-body">
+          <div class="card-title">${label} ${i + 1}: ${item.name}</div>
+          <div class="card-style">${item.style}</div>
+          <p class="card-desc">${item.description}</p>
+        </div>
+      `;
+      cardsContainer.appendChild(card);
+    });
+  }
+
+  function renderEmpty(query) {
+    cardsContainer.innerHTML = `
+      <div class="empty-state">
+        No match for "${query}" yet. Try a BBQ classic like
+        <span class="examples">Brisket</span> or
+        <span class="examples">Buffalo Wings</span>, or a beer like
+        <span class="examples">Modelo</span> or
+        <span class="examples">Guinness</span>.
+      </div>
+    `;
+  }
+
+  function doSearch(query) {
+    if (!query || !query.trim()) return;
+
+    hero.classList.add('hidden');
+    topbar.classList.remove('hidden');
+    resultsSection.classList.remove('hidden');
+
+    document.getElementById('searchInputTop').value = query;
+
+    const foodMatch = findMatch(query, DATA.food_names);
+    if (foodMatch) {
+      renderResults(DATA.food_to_beers[foodMatch], 'beer');
+      return;
+    }
+
+    const beerMatch = findMatch(query, DATA.beer_names);
+    if (beerMatch) {
+      renderResults(DATA.beer_to_foods[beerMatch], 'food');
+      return;
+    }
+
+    renderEmpty(query);
+  }
+
+  document.getElementById('searchBtnHero').addEventListener('click', () => {
+    doSearch(document.getElementById('searchInputHero').value);
+  });
+  document.getElementById('searchInputHero').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') doSearch(e.target.value);
+  });
+
+  document.getElementById('searchBtnTop').addEventListener('click', () => {
+    doSearch(document.getElementById('searchInputTop').value);
+  });
+  document.getElementById('searchInputTop').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') doSearch(e.target.value);
+  });
+</script>
+</body>
+</html>
